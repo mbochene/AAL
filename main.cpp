@@ -8,7 +8,7 @@ using namespace std;
 int main(int argc, char* argv[])
 {
     int numberOfNodes, numberOfEdges, trunkVolume, *lootVolume, *lootValue;
-    int x, y;                                                                                        //auxiliary variables
+    int x, y;                                                                                        //zmienne pomocnicze
     list<int> *graph;
 
     if(strcmp(argv[1],"-m1")==0)
@@ -23,19 +23,21 @@ int main(int argc, char* argv[])
 
         for(int i=0;i<numberOfEdges;i++)
         {
-            cin >> x >> y;                                                                         //read edges from user input
+            cin >> x >> y;                                                                         //wczytywanie krawędzi
             graph[x].push_back(y);
         }
 
         for(int i=0;i<numberOfNodes;i++)
         {
-            cin >> x >> y;                                                                        //read volume and value of the loot available on the node
+            cin >> x >> y;                                                                        //wczytywanie wielkości i wartości łupów na poszczególnych węzłach
             lootVolume[i]=x;
             lootValue[i]=y;
         }
 
-
         robberyScheme scheme(numberOfNodes, trunkVolume, lootVolume, lootValue, graph);
+        scheme.solve();
+        cout << scheme.get() << endl;
     }
+    
     return 0;
 }
