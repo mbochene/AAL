@@ -36,8 +36,8 @@ int main(int argc, char* argv[])
 
         robberyScheme scheme(numberOfNodes, trunkVolume, lootVolume, lootValue, graph);
         scheme.solve();
-        cout << scheme.get() << endl;
+        cout << scheme.getEscapeRouteLength() << endl;
     }
-    
+
     return 0;
 }

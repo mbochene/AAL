@@ -9,11 +9,11 @@ using namespace std;
 
 class robberyScheme
 {
-    int numberOfNodes, trunkVolume, maxLoot, *lootVolume, *lootValue;
+    int numberOfNodes, trunkVolume, maxLoot, *lootVolume, *lootValue, routeLength;
     list<int> *graph;
     list<int> *path;                                                                    //zmienna przechowująca najkrótsze ścieżki (wynik algorytmu Dijkstry)
 
-    void returnPaths()                                                                  //zmodyfikowany algorytm Dijkstry -> wierzchołek może mieć więcej poprzedników niż 1
+    void findPaths()                                                                  //zmodyfikowany algorytm Dijkstry -> wierzchołek może mieć więcej poprzedników niż 1
     {
         vector<int> cost(numberOfNodes, 2147483647);                                    //MAXINT jako początkowy minimalny koszt dla każdego wierzchołka
         cost[0]=0;                                                                      //wierzchołek startowy
@@ -39,12 +39,36 @@ class robberyScheme
                 {
                     if(!QS[j] && cost[j]>=cost[minNode]+1)
                     {
-                        cost[j]=cost[minNode]+1;
+                        if(cost[j]!=cost[minNode]+1)
+                        {
+                            cost[j]=cost[minNode]+1;
+                        }
                         path[j].push_back(minNode);
                     }
                 }
             }   
         }
+        routeLength=cost[numberOfNodes-1];                                             //zapisanie długości najkrótszej ścieżki
+    }
+
+    void getPaths(int currentLength, int node, vector<int> escapeRoute, list<int>::iterator it)
+    {
+        int currentNode=node;
+        while(currentNode!=0)
+        {
+            if(*it!=path[currentNode].back())
+            {
+                getPaths(currentLength, currentNode, escapeRoute, ++it);
+                it--;
+            }
+            escapeRoute[currentLength]=currentNode;
+            currentNode=*it;
+            currentLength++;
+            it=path[*it].begin();
+        }
+        for(int x : escapeRoute)
+            cout << x << " ";
+        cout << endl;
     }
 
     public:
@@ -69,12 +93,15 @@ class robberyScheme
 
     void solve()
     {
-        returnPaths();
+        findPaths();
+        vector<int> i(routeLength+1);
+        list<int>::iterator it=path[numberOfNodes-1].begin();
+        getPaths(0, numberOfNodes-1, i, it);
     }
 
-    int get()
+    int getEscapeRouteLength()
     {
-        return maxLoot;
+        return routeLength;
     }
 };
 
