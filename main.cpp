@@ -1,5 +1,6 @@
 #include <iostream>
 #include <list>
+#include <vector>
 #include <string.h>
 #include "robberyScheme.hpp"
 
@@ -7,7 +8,7 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-    int numberOfNodes, numberOfEdges, trunkVolume, *lootVolume, *lootValue;
+    int numberOfNodes, numberOfEdges, trunkVolume;
     int x, y;                                                                                        //zmienne pomocnicze
     list<int> *graph;
 
@@ -17,8 +18,8 @@ int main(int argc, char* argv[])
         cin >> numberOfEdges;
         cin >> trunkVolume;
 
-        lootVolume=new int[numberOfNodes];
-        lootValue=new int[numberOfNodes];
+        vector<int> lootVolume(numberOfNodes);
+        vector<int> lootValue(numberOfNodes);
         graph=new list<int>[numberOfNodes];
 
         for(int i=0;i<numberOfEdges;i++)
@@ -36,7 +37,12 @@ int main(int argc, char* argv[])
 
         robberyScheme scheme(numberOfNodes, trunkVolume, lootVolume, lootValue, graph);
         scheme.solve();
-        cout << scheme.getEscapeRouteLength() << endl;
+        cout << "Liczba znalezionych najkrotszych sciezek: " << scheme.getNumberOfEscapeRoutes() << endl;
+        cout << "Dlugosc najkrotszej sciezki: " << scheme.getEscapeRouteLength() << endl;
+        cout << "Maksymalna wartosc skradzionego towaru: " << scheme.getMaxLoot() << endl;
+        cout << "Wiercholki nalezace do najkrotszej sciezki dajacej najwieksze mozliwe zyski: ";
+        for(int i : scheme.getEscapeRoute())
+            cout << i << " ";
     }
 
     return 0;

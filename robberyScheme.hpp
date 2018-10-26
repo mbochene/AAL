@@ -4,14 +4,18 @@
 #include <iostream>
 #include <list>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
 class robberyScheme
 {
-    int numberOfNodes, trunkVolume, maxLoot, *lootVolume, *lootValue, routeLength;
+    int numberOfNodes, trunkVolume, maxLoot, routeLength, numberOfEscapeRoutes;
     list<int> *graph;
     list<int> *path;                                                                    //zmienna przechowująca najkrótsze ścieżki (wynik algorytmu Dijkstry)
+    vector<int> finalRoute;
+    vector<int> lootVolume;
+    vector<int> lootValue;
 
     void findPaths()                                                                  //zmodyfikowany algorytm Dijkstry -> wierzchołek może mieć więcej poprzedników niż 1
     {
@@ -48,31 +52,54 @@ class robberyScheme
                 }
             }   
         }
-        routeLength=cost[numberOfNodes-1];                                             //zapisanie długości najkrótszej ścieżki
+        routeLength=cost[numberOfNodes-1]+1;                                             //zapisanie długości najkrótszej ścieżki (dodanie wierzchołka początkowego)
     }
 
     void getPaths(int currentLength, int node, vector<int> escapeRoute, list<int>::iterator it)
     {
-        int currentNode=node;
+        numberOfEscapeRoutes++;                                                         
+        int currentNode=node;                                                           //zapisanie numeru sprawdzanego wierzchołka
         while(currentNode!=0)
         {
-            if(*it!=path[currentNode].back())
+            if(*it!=path[currentNode].back())                                           //jesli kolejny sąsiad istnieje, to wywołaj funkcję dla sąsiada
             {
                 getPaths(currentLength, currentNode, escapeRoute, ++it);
                 it--;
             }
-            escapeRoute[currentLength]=currentNode;
+            escapeRoute[currentLength]=currentNode;                                     //dodanie obecnego wierzchołka do wektora przechowującego wierzchołki tej ścieżki
             currentNode=*it;
-            currentLength++;
-            it=path[*it].begin();
+            currentLength++;                                                            
+            it=path[*it].begin();                                                       //przeniesienie się na sąsiada
         }
-        for(int x : escapeRoute)
-            cout << x << " ";
-        cout << endl;
+        solveKnapsackProblem(escapeRoute);
+    }
+
+    void solveKnapsackProblem(vector<int> node)                                         
+    {
+        vector<vector<int>> matrix(trunkVolume+1, vector<int>(routeLength+1,0));        //stworzenie macierzy (routeLength+1)x(trunkVolume+1)
+        for(int i=1;i<=routeLength;i++)
+        {
+            for(int j=0;j<=trunkVolume;j++)
+            {
+                if(lootVolume[node[i-1]]>j)                                //jeśli przedmiot nie mieści się do plecaka (przesunięcie w lootVolume spowodowane jest faktem, że pierwszy element jest na indeksie 0)
+                {
+                    matrix[j][i]=matrix[j][i-1];                                      //to nie należy go wkładać
+                }
+                else
+                {
+                    matrix[j][i]=max(matrix[j][i-1], matrix[j-lootVolume[node[i-1]]][i-1]+lootValue[node[i-1]]);
+                }
+            }
+        }
+        if(matrix[trunkVolume][routeLength]>maxLoot)
+        {
+            maxLoot=matrix[trunkVolume][routeLength];
+            finalRoute=node;
+        }
     }
 
     public:
-    robberyScheme(int n, int t, int *lVol, int *lVal, list<int> *g)
+    robberyScheme(int n, int t, vector<int> lVol, vector<int> lVal, list<int> *g)
     {
         numberOfNodes=n;
         trunkVolume=t;
@@ -80,13 +107,12 @@ class robberyScheme
         lootValue=lVal;
         graph=g;
         maxLoot=0;
+        numberOfEscapeRoutes=0;
         path=new list<int>[n];
     }
 
     ~robberyScheme()
     {
-        delete[] lootVolume;
-        delete[] lootValue;
         delete[] graph;
         delete[] path;
     }
@@ -94,7 +120,7 @@ class robberyScheme
     void solve()
     {
         findPaths();
-        vector<int> i(routeLength+1);
+        vector<int> i(routeLength);
         list<int>::iterator it=path[numberOfNodes-1].begin();
         getPaths(0, numberOfNodes-1, i, it);
     }
@@ -102,6 +128,21 @@ class robberyScheme
     int getEscapeRouteLength()
     {
         return routeLength;
+    }
+
+    int getNumberOfEscapeRoutes()
+    {
+        return numberOfEscapeRoutes;
+    }
+
+    vector<int> getEscapeRoute()
+    {
+        return finalRoute;
+    }
+
+    int getMaxLoot()
+    {
+        return maxLoot;
     }
 };
 
