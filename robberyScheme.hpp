@@ -11,13 +11,13 @@ using namespace std;
 class robberyScheme
 {
     int numberOfNodes, trunkVolume, maxLoot, routeLength, numberOfEscapeRoutes;
-    list<int> *graph;
-    list<int> *path;                                                                    //zmienna przechowująca najkrótsze ścieżki (wynik algorytmu Dijkstry)
+    vector<list<int>> graph;
+    vector<list<int>> path;                                                                    //zmienna przechowująca najkrótsze ścieżki (wynik algorytmu Dijkstry)
     vector<int> finalRoute;
     vector<int> lootVolume;
     vector<int> lootValue;
 
-    void findPaths()                                                                  //zmodyfikowany algorytm Dijkstry -> wierzchołek może mieć więcej poprzedników niż 1
+    void findPaths()                                                                    //zmodyfikowany algorytm Dijkstry -> wierzchołek może mieć więcej poprzedników niż 1
     {
         vector<int> cost(numberOfNodes, 2147483647);                                    //MAXINT jako początkowy minimalny koszt dla każdego wierzchołka
         cost[0]=0;                                                                      //wierzchołek startowy
@@ -71,19 +71,19 @@ class robberyScheme
             currentLength++;                                                            
             it=path[*it].begin();                                                       //przeniesienie się na sąsiada
         }
-        solveKnapsackProblem(escapeRoute);
+        solveKnapsackProblem(escapeRoute);                                              //rozwiązanie problemu plecakowego dla danej ścieżki
     }
 
-    void solveKnapsackProblem(vector<int> node)                                         
+    void solveKnapsackProblem(const vector<int>& node)                                         
     {
-        vector<vector<int>> matrix(trunkVolume+1, vector<int>(routeLength+1,0));        //stworzenie macierzy (routeLength+1)x(trunkVolume+1)
+        vector<vector<int>> matrix(trunkVolume+1, vector<int>(routeLength+1,0));        //stworzenie macierzy (trunkVolume+1)x(routeLength+1)
         for(int i=1;i<=routeLength;i++)
         {
             for(int j=0;j<=trunkVolume;j++)
             {
-                if(lootVolume[node[i-1]]>j)                                //jeśli przedmiot nie mieści się do plecaka (przesunięcie w lootVolume spowodowane jest faktem, że pierwszy element jest na indeksie 0)
+                if(lootVolume[node[i-1]]>j)                                             //jeśli przedmiot nie mieści się do plecaka (przesunięcie w lootVolume spowodowane jest faktem, że pierwszy element jest na indeksie 0)
                 {
-                    matrix[j][i]=matrix[j][i-1];                                      //to nie należy go wkładać
+                    matrix[j][i]=matrix[j][i-1];                                        //to nie należy go wkładać
                 }
                 else
                 {
@@ -91,7 +91,7 @@ class robberyScheme
                 }
             }
         }
-        if(matrix[trunkVolume][routeLength]>maxLoot)
+        if(matrix[trunkVolume][routeLength]>maxLoot)                                    //jeśli możliwy do uzyskania łup jest maksymalny, to przypisz wartości odpowiednim zmiennym
         {
             maxLoot=matrix[trunkVolume][routeLength];
             finalRoute=node;
@@ -99,7 +99,7 @@ class robberyScheme
     }
 
     public:
-    robberyScheme(int n, int t, vector<int> lVol, vector<int> lVal, list<int> *g)
+    robberyScheme(int n, int t, const vector<int>& lVol, const vector<int>& lVal, const vector<list<int>>& g)
     {
         numberOfNodes=n;
         trunkVolume=t;
@@ -108,14 +108,10 @@ class robberyScheme
         graph=g;
         maxLoot=0;
         numberOfEscapeRoutes=0;
-        path=new list<int>[n];
+        path.resize(numberOfNodes);
     }
 
-    ~robberyScheme()
-    {
-        delete[] graph;
-        delete[] path;
-    }
+    ~robberyScheme(){};
 
     void solve()
     {
