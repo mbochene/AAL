@@ -19,7 +19,7 @@ int getValue(const char *x, int begin)                                          
 
 int main(int argc, char* argv[])
 {
-    int numberOfNodes, numberOfEdges, trunkVolume, type;
+    int numberOfNodes, numberOfEdges, trunkVolume, type, nodesPerLevel;
     int x, y;                                                                                        //zmienne pomocnicze
 
     if(strcmp(argv[1],"-m1")==0)
@@ -58,8 +58,9 @@ int main(int argc, char* argv[])
         numberOfNodes=getValue(argv[2],2);
         trunkVolume=getValue(argv[3],3);
         type=getValue(argv[4],5);
-
-        problemGenerator generator(numberOfNodes, trunkVolume, type);
+        nodesPerLevel=getValue(argv[5],2);
+        
+        problemGenerator generator(numberOfNodes, trunkVolume, type, nodesPerLevel);
         generator.generate();
         generator.showGeneratedProblem();
         robberyScheme scheme(numberOfNodes, trunkVolume, generator.getLootVolumeVector(), generator.getLootValueVector(), generator.getGraph());
