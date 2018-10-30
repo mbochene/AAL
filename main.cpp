@@ -1,3 +1,8 @@
+/*
+    Mateusz Bochenek
+    AAL-9-LS rabuś
+*/
+
 #include <iostream>
 #include <list>
 #include <vector>

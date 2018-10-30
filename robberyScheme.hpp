@@ -1,3 +1,8 @@
+/*
+    Mateusz Bochenek
+    AAL-9-LS rabuś
+*/
+
 #ifndef ROBBERY_SCHEME_HPP_
 #define ROBBERY_SCHEME_HPP_
 

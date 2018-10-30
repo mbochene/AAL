@@ -1,3 +1,8 @@
+/*
+    Mateusz Bochenek
+    AAL-9-LS rabuś
+*/
+
 #ifndef PROBLEM_GENERATOR_HPP_
 #define PROBLEM_GENERATOR_HPP_
 
