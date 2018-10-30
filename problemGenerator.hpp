@@ -60,10 +60,8 @@ class problemGenerator{
             numberOfParts=(numberOfNodes-2)/nodesPerLevel;
             int auxiliary=nodesPerLevel+1;
             node=(nodesPerLevel*numberOfParts)+1;
-            cout << modulo << " " << numberOfParts << " " << node << endl;
             for(int i=1;i<node-nodesPerLevel;i++)                                                                         //konstrukcja "środka" grafu
             {
-                cout << i << endl;
                 for(int j=0;j<nodesPerLevel;j++)
                 {
                     graph[i].push_back(auxiliary+j);

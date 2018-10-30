@@ -99,6 +99,9 @@ class robberyScheme
     }
 
     public:
+
+    robberyScheme(){};
+
     robberyScheme(int n, int t, const vector<int>& lVol, const vector<int>& lVal, const vector<list<int>>& g)
     {
         numberOfNodes=n;
