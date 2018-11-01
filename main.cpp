@@ -97,8 +97,8 @@ int main(int argc, char* argv[])
         double mediant;
         double medianT;
 
-        cout << "------------------------------------------------------" << endl << "|" << setw(41) << "Algorytm z asymptota O(T(n))=" << nodesPerLevel << "^[(n-1)/" << nodesPerLevel+1 << "]" << "|" << endl << "------------------------------------------------------" << endl; 
-        cout << "|" << setw(10) << "n" << "|" << setw(20) << "t(n)" << "|" << setw(20) << "q" << "|" << endl << "------------------------------------------------------" << endl;
+        cout << "----------------------------------------------------------------" << endl << "|" << setw(51) << "Algorytm z asymptota O(T(n))=" << nodesPerLevel << "^[(n-1)/" << nodesPerLevel+1 << "]" << "|" << endl << "----------------------------------------------------------------" << endl; 
+        cout << "|" << setw(20) << "n" << "|" << setw(20) << "t(n)" << "|" << setw(20) << "q" << "|" << endl << "----------------------------------------------------------------" << endl;
         for(int i=0;i<k;i++)
         {
             for(int j=0;j<r;j++)
@@ -130,7 +130,7 @@ int main(int argc, char* argv[])
         for(int i=0;i<k;i++)                                                                                                                                                //rysowanie tabelki
         {
             q=(table2[i]*medianT)/(T[i]*mediant);
-            cout << "|" << setw(10) << table1[i] << "|" << setw(20) << table2[i] << "|" << setw(20) << q << "|" << endl << "------------------------------------------------------" << endl;
+            cout << "|" << setw(20) << table1[i] << "|" << setw(20) << table2[i] << "|" << setw(20) << q << "|" << endl << "----------------------------------------------------------------" << endl;
         }
     }
 
