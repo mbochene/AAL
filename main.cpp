@@ -97,6 +97,7 @@ int main(int argc, char* argv[])
         double mediant;
         double medianT;
 
+        cout << "------------------------------------------------------" << endl << "|" << setw(41) << "Algorytm z asymptota O(T(n))=" << nodesPerLevel << "^[(n-1)/" << nodesPerLevel+1 << "]" << "|" << endl << "------------------------------------------------------" << endl; 
         cout << "|" << setw(10) << "n" << "|" << setw(20) << "t(n)" << "|" << setw(20) << "q" << "|" << endl << "------------------------------------------------------" << endl;
         for(int i=0;i<k;i++)
         {

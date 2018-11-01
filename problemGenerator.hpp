@@ -125,17 +125,6 @@ class problemGenerator{
             cout << "[" << lootVolume[i] << "," << lootValue[i] << "] ";
         cout << endl;
     }
-
-    int getModulo()
-    {
-        return modulo;
-    }
-
-    int getNumberOfParts()
-    {
-        return numberOfParts;
-    }
-
 };
 
 #endif
